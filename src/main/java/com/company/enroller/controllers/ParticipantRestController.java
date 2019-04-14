@@ -31,7 +31,7 @@ public class ParticipantRestController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getMeeting(@PathVariable("id") String login) {
+	public ResponseEntity<?> getParticipant(@PathVariable("id") String login) {
 	     Participant participant = participantService.findByLogin(login);
 	     if (participant == null) {
 	         return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -48,6 +48,28 @@ public class ParticipantRestController {
 		
 		participantService.add(participant);
 		return new ResponseEntity<Participant>(participant, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deleteParticipant(@PathVariable("id") String login) {
+		Participant participant = participantService.findByLogin(login);
+		if (participant == null) {
+	         return new ResponseEntity(HttpStatus.NOT_FOUND);
+	     }
+		participantService.delete(participant);
+		return new ResponseEntity<Participant>(participant, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateParticipantPassword(@PathVariable("id") String login,
+			@RequestBody Participant incomingParticipant) {
+		Participant participant = participantService.findByLogin(login);
+		if (participant == null) {
+	         return new ResponseEntity(HttpStatus.NOT_FOUND);
+	     }
+		participant.setPassword(incomingParticipant.getPassword());
+		participantService.update(participant);
+		return new ResponseEntity<Participant>(participant, HttpStatus.OK);
 	}
 
 }
