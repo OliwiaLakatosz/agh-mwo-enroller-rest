@@ -40,4 +40,10 @@ public class MeetingService {
         connector.getSession().save(meeting);
         transaction.commit();
     }
+
+    public void delete(Meeting meeting) {
+	    Transaction transaction = connector.getSession().beginTransaction();
+	    connector.getSession().delete(meeting);
+	    transaction.commit();
+    }
 }
