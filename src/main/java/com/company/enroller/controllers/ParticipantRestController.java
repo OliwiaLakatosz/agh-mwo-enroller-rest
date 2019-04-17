@@ -15,18 +15,15 @@ import com.company.enroller.model.Participant;
 import com.company.enroller.persistence.ParticipantService;
 
 @RestController
-@RequestMapping("/participants") // główna ścieżka, endpoint
+@RequestMapping("/participants")
 public class ParticipantRestController {
 
-	// szuka w ParticipantService @Component("participantService")
 	@Autowired
 	ParticipantService participantService;
 	
-	// to tak naprawde prowadzi do /participants/ bo value "" doklejone do requestmappingu tam na górze
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<?> getParticipants() {
 		Collection<Participant> participants = participantService.getAll();
-		// to już wezmie i wysle odpowiedniego jsona, Jackson działa.
 		return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
 	}
 	

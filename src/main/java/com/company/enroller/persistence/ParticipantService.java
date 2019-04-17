@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.company.enroller.model.Participant;
 
-//participant jest do dogadania sie z hibernate
 @Component("participantService")
 public class ParticipantService {
 
@@ -17,7 +16,6 @@ public class ParticipantService {
 		connector = DatabaseConnector.getInstance();
 	}
 	
-	// pobieramy liste wszystkich rekordow matchujacych do participants
 	public Collection<Participant> getAll() {
 		return connector.getSession().createCriteria(Participant.class).list();
 	}

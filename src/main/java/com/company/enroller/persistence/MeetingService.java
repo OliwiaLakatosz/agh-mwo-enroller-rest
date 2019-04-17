@@ -1,8 +1,8 @@
 package com.company.enroller.persistence;
 
 import java.util.Collection;
-import java.util.List;
 
+import com.company.enroller.model.Participant;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
@@ -51,7 +51,20 @@ public class MeetingService {
         Transaction transaction = connector.getSession().beginTransaction();
         connector.getSession().update(meeting);
         transaction.commit();
+    }
 
+    public Collection<Participant> getMeetingParticipants(long meetingId) {
+	    Meeting meeting = this.getMeetingById(meetingId);
+	    return meeting.getParticipants();
+    }
+
+    public void addParticipantToMeeting(long id, Participant participant) {
+	    Transaction transaction = connector.getSession().beginTransaction();
+	    Meeting meeting = this.getMeetingById(id);
+	    meeting.addParticipant(participant);
+	    connector.getSession().save(meeting);
+	    connector.getSession().save(participant);
+	    transaction.commit();
     }
 
 }
