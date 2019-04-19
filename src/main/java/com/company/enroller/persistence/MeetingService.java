@@ -75,4 +75,17 @@ public class MeetingService {
 	    connector.getSession().save(participant);
 	    transaction.commit();
     }
+
+    public Collection<Meeting> sortByTitle() {
+        String hql = "FROM Meeting M ORDER BY M.title";
+        Query query = connector.getSession().createQuery(hql);
+        return query.list();
+    }
+
+    public Collection<Meeting> searchMeetingsByParticipant(String login) {
+        String hql = "SELECT m FROM Meeting m JOIN m.participants p WHERE p.login LIKE ?";
+        Query query = connector.getSession().createQuery(hql);
+        query.setParameter(0, login);
+        return query.list();
+    }
 }

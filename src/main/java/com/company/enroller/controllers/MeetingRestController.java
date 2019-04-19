@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Part;
 import java.util.Collection;
 
 @RestController
@@ -103,6 +102,7 @@ public class MeetingRestController {
         }
 
         meetingService.removeParticipantFromMeeting(meetingId, participant);
+        meetingService.update(meeting);
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
     }
 
@@ -113,8 +113,28 @@ public class MeetingRestController {
         if (participants == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        //TODO: For now, participant login "must be" unique in table meeting_participant in DB.
-        //TODO: Change it so one Participant can go to multiple meetings (is it needed?)
+
         return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/sorted/title", method = RequestMethod.GET)
+    public ResponseEntity<?> getMeetingsSortedByAttribute() {
+        Collection<Meeting> sorted= meetingService.sortByTitle();
+        return new ResponseEntity<Collection<Meeting>>(sorted, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
+    public  ResponseEntity<?> searchMeetingsByParticipant(@PathVariable("id") String login) {
+        Participant participant = participantService.findByLogin(login);
+        Collection<Meeting> meetings = meetingService.searchMeetingsByParticipant(login);
+        if (meetings.size() == 0) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/search/{attribute}", method = RequestMethod.GET)
+    public ResponseEntity<?> searchMeetingsBy(@PathVariable("attribute") String attribute) {
+        return null;
     }
 }
