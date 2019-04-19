@@ -123,7 +123,7 @@ public class MeetingRestController {
         return new ResponseEntity<Collection<Meeting>>(sorted, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/participant={id}", method = RequestMethod.GET)
     public  ResponseEntity<?> searchMeetingsByParticipant(@PathVariable("id") String login) {
         Participant participant = participantService.findByLogin(login);
         Collection<Meeting> meetings = meetingService.searchMeetingsByParticipant(login);
