@@ -1,5 +1,5 @@
 # agh-mwo-enroller-rest
-
+meetings/ endpoint
 demo: https://enroller-app.herokuapp.com/
 
 | URL | Request |result |
