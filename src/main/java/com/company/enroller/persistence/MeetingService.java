@@ -82,7 +82,7 @@ public class MeetingService {
 
     public Collection<Meeting> sortByTitle() {
         List<Meeting> meetings = connector.getSession().createCriteria(Meeting.class).list();
-        meetings.sort(Comparator.comparing(Meeting::getTitle));
+        meetings.sort(Comparator.comparing(Meeting::getTitle, String.CASE_INSENSITIVE_ORDER));
         return meetings;
     }
 
