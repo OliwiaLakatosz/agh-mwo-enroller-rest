@@ -13,5 +13,5 @@ demo: https://enroller-app.herokuapp.com/
 |/meetings/{meetingId}/participants/{participantId}|DELETE| remove participant from meeting |
 |/meetings/{id}/participants | GET| returns participants for meeting with given id|
 |/meetings/sorted/title |GET| return sorted meetings by titles|
-|/meetings/search/participant={id}|GET| return participant's meetings |
-|/meetings/search/{type}={attribute}|GET| return meetings with matching {type}(title or description}, {attribute}(substring to find by (for example: meetings/search/description=new)|
+|/meetings/search/?id=|GET| return participant's meetings |
+|/meetings/search?title=...&description=... | GET | returns meetings with matching title and/or description |
