@@ -1,6 +1,8 @@
 package com.company.enroller.persistence;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import com.company.enroller.model.Participant;
 import org.hibernate.Criteria;
@@ -77,9 +79,9 @@ public class MeetingService {
     }
 
     public Collection<Meeting> sortByTitle() {
-        String hql = "FROM Meeting M ORDER BY M.title";
-        Query query = connector.getSession().createQuery(hql);
-        return query.list();
+        List<Meeting> meetings = connector.getSession().createCriteria(Meeting.class).list();
+        meetings.sort(Comparator.comparing(Meeting::getTitle));
+        return meetings;
     }
 
     public Collection<Meeting> searchMeetingsByParticipant(String login) {
