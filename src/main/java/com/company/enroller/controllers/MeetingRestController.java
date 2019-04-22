@@ -32,7 +32,7 @@ public class MeetingRestController {
     public ResponseEntity<?> getMetting(@PathVariable("id") long id) {
         Meeting meeting = meetingService.getMeetingById(id);
         if (meeting == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Meeting does not exist.",HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
     }
@@ -52,7 +52,7 @@ public class MeetingRestController {
     public ResponseEntity<?> deleteMeeting(@PathVariable("id") long id) {
         Meeting meeting = meetingService.getMeetingById(id);
         if (meeting == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Meeting does not exist.", HttpStatus.NOT_FOUND);
         }
         meetingService.delete(meeting);
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
@@ -63,7 +63,7 @@ public class MeetingRestController {
                                            @RequestBody Meeting incomingMeeting) {
         Meeting meeting = meetingService.getMeetingById(id);
         if (meeting == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Meeting does not exist.", HttpStatus.NOT_FOUND);
         }
         meeting.setDate(incomingMeeting.getDate());
         meeting.setDescription(incomingMeeting.getDescription());
@@ -78,7 +78,7 @@ public class MeetingRestController {
         Meeting meeting = meetingService.getMeetingById(meetingId);
         Participant participant = participantService.findByLogin(participantId);
         if (meeting == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Meeting does not exist.", HttpStatus.NOT_FOUND);
         }
         if (participant == null) {
             return new ResponseEntity<>("Participant with this login does not exist.", HttpStatus.NOT_FOUND);
@@ -111,7 +111,7 @@ public class MeetingRestController {
 
         Collection<Participant> participants = meetingService.getMeetingParticipants(meetingId);
         if (participants == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Couldn't find any participants for meeting with id=" + meetingId, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
@@ -126,9 +126,13 @@ public class MeetingRestController {
     @RequestMapping(value = "/search/participant", method = RequestMethod.GET)
     public  ResponseEntity<?> searchMeetingsByParticipant(@RequestParam String id) {
         Participant participant = participantService.findByLogin(id);
+        if (participant == null) {
+            return new ResponseEntity<>("Participant with login " + id + " doesn't exist.", HttpStatus.NOT_FOUND);
+        }
+
         Collection<Meeting> meetings = meetingService.searchMeetingsByParticipant(id);
         if (meetings.size() == 0) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Meeting does not exist.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
     }
