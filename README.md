@@ -1,5 +1,7 @@
 # agh-mwo-enroller-rest
 
+demo: https://enroller-app.herokuapp.com/
+
 | URL | Request |result |
 | :-------------|:-------------:|:-------------|
 | /meetings     | GET | list of all meetings |
