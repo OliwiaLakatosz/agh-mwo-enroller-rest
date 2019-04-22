@@ -88,4 +88,20 @@ public class MeetingService {
         query.setParameter(0, login);
         return query.list();
     }
+
+    public Collection<Meeting> searchMeetingByAttribute(String type, String attribute) {
+        Criteria criteria = connector.getSession().createCriteria(Meeting.class);
+        StringBuilder sb = new StringBuilder(attribute);
+        sb.append("%");
+        sb.insert(0, "%");
+
+        if (type.equals("title")) {
+            criteria.add(Restrictions.like("title", sb.toString()));
+        }
+        if (type.equals("description")) {
+            criteria.add(Restrictions.like("description", sb.toString()));
+        }
+
+        return (Collection<Meeting>) criteria.list();
+    }
 }

@@ -118,7 +118,7 @@ public class MeetingRestController {
     }
 
     @RequestMapping(value = "/sorted/title", method = RequestMethod.GET)
-    public ResponseEntity<?> getMeetingsSortedByAttribute() {
+    public ResponseEntity<?> getMeetingsSortedByTitle() {
         Collection<Meeting> sorted= meetingService.sortByTitle();
         return new ResponseEntity<Collection<Meeting>>(sorted, HttpStatus.OK);
     }
@@ -133,8 +133,13 @@ public class MeetingRestController {
         return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/search/{attribute}", method = RequestMethod.GET)
-    public ResponseEntity<?> searchMeetingsBy(@PathVariable("attribute") String attribute) {
-        return null;
+    @RequestMapping(value = "/search/{type}={attribute}", method = RequestMethod.GET)
+    public ResponseEntity<?> searchMeetingsBy(@PathVariable("attribute") String attribute,
+                                              @PathVariable("type") String type) {
+        Collection<Meeting> found = meetingService.searchMeetingByAttribute(type, attribute);
+        if (found.size() == 0) {
+            return new ResponseEntity<>("Meeting with given title/description does not exits", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Collection<Meeting>>(found, HttpStatus.OK);
     }
 }
