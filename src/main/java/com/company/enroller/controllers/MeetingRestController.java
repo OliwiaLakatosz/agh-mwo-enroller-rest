@@ -119,24 +119,24 @@ public class MeetingRestController {
 
     @RequestMapping(value = "/sorted/title", method = RequestMethod.GET)
     public ResponseEntity<?> getMeetingsSortedByTitle() {
-        Collection<Meeting> sorted= meetingService.sortByTitle();
+        Collection<Meeting> sorted = meetingService.sortByTitle();
         return new ResponseEntity<Collection<Meeting>>(sorted, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/search/participant={id}", method = RequestMethod.GET)
-    public  ResponseEntity<?> searchMeetingsByParticipant(@PathVariable("id") String login) {
-        Participant participant = participantService.findByLogin(login);
-        Collection<Meeting> meetings = meetingService.searchMeetingsByParticipant(login);
+    @RequestMapping(value = "/search/participant", method = RequestMethod.GET)
+    public  ResponseEntity<?> searchMeetingsByParticipant(@RequestParam String id) {
+        Participant participant = participantService.findByLogin(id);
+        Collection<Meeting> meetings = meetingService.searchMeetingsByParticipant(id);
         if (meetings.size() == 0) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/search/{type}={attribute}", method = RequestMethod.GET)
-    public ResponseEntity<?> searchMeetingsBy(@PathVariable("attribute") String attribute,
-                                              @PathVariable("type") String type) {
-        Collection<Meeting> found = meetingService.searchMeetingByAttribute(type, attribute);
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseEntity<?> searchMeetingsByAttributes(@RequestParam String title,
+                                                   @RequestParam(required = false) String description) {
+        Collection<Meeting> found = meetingService.searchMeetingByAttribute(title, description);
         if (found.size() == 0) {
             return new ResponseEntity<>("Meeting with given title/description does not exits", HttpStatus.NOT_FOUND);
         }

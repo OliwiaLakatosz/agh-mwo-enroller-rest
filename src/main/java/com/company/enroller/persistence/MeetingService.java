@@ -8,6 +8,8 @@ import com.company.enroller.model.Participant;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
@@ -89,21 +91,30 @@ public class MeetingService {
         Query query = connector.getSession().createQuery(hql);
         query.setParameter(0, login);
         return query.list();
+//        Criteria criteria = connector.getSession().createCriteria(Meeting.class);
+//        (Meeting) criteria.add(Restrictions.eq("title", title)).uniqueResult();
+
     }
 
-    public Collection<Meeting> searchMeetingByAttribute(String type, String attribute) {
+    public Collection<Meeting> searchMeetingByAttribute(String title, String description) {
         Criteria criteria = connector.getSession().createCriteria(Meeting.class);
-        StringBuilder sb = new StringBuilder(attribute);
-        sb.append("%");
-        sb.insert(0, "%");
 
-        if (type.equals("title")) {
-            criteria.add(Restrictions.like("title", sb.toString()));
-        }
-        if (type.equals("description")) {
-            criteria.add(Restrictions.like("description", sb.toString()));
-        }
+        StringBuilder t = new StringBuilder(title);
+        t.append("%");
+        t.insert(0, "%");
+        Criterion titleRestriction = Restrictions.like("title", t.toString());
 
-        return (Collection<Meeting>) criteria.list();
+        if (description != null) {
+            StringBuilder d = new StringBuilder(description);
+            d.append("%");
+            d.insert(0, "%");
+            Criterion descrRestriction = Restrictions.like("description", d.toString());
+            LogicalExpression andExp = Restrictions.and(titleRestriction, descrRestriction);
+            criteria.add(andExp);
+            return criteria.list();
+        } else {
+            criteria.add(Restrictions.like("title", t.toString()));
+            return criteria.list();
+        }
     }
 }
