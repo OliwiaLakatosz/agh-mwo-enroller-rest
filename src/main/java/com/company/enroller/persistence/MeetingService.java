@@ -25,8 +25,6 @@ public class MeetingService {
 	}
 
 	public Collection<Meeting> getAll() {
-//		String hql = "FROM Meeting";
-//		Query query = connector.getSession().createQuery(hql);
 		return connector.getSession().createCriteria(Meeting.class).list();
 	}
 
@@ -87,13 +85,12 @@ public class MeetingService {
     }
 
     public Collection<Meeting> searchMeetingsByParticipant(String login) {
+	    Transaction transaction = connector.getSession().beginTransaction();
         String hql = "SELECT m FROM Meeting m JOIN m.participants p WHERE p.login LIKE ?";
         Query query = connector.getSession().createQuery(hql);
         query.setParameter(0, login);
+        transaction.commit();
         return query.list();
-//        Criteria criteria = connector.getSession().createCriteria(Meeting.class);
-//        (Meeting) criteria.add(Restrictions.eq("title", title)).uniqueResult();
-
     }
 
     public Collection<Meeting> searchMeetingByAttribute(String title, String description) {
