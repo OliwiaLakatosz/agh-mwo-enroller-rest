@@ -6,5 +6,3 @@
 /target/
 .DS_Store
 .idea/
-*.db
-enroller.db
