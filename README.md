@@ -11,7 +11,7 @@ demo: https://enroller-app.herokuapp.com/
 | /meetings/{id} | PUT | update meeting with given id|
 |/meetings/{meetingId}/participants/{participantId}|POST| add participant to a meeting|
 |/meetings/{meetingId}/participants/{participantId}|DELETE| remove participant from meeting |
-|/meetings/{id}/participants | GET| returns participants for meeting with given id|
+|/meetings/{id}/participants | GET| return participants for meeting with given id|
 |/meetings/sorted/title |GET| return sorted meetings by titles|
 |/meetings/search/participant?id=...|GET| return participant's meetings |
-|/meetings/search?title=...&description=... | GET | returns meetings with matching title and/or description |
+|/meetings/search?title=...&description=... | GET | return meetings with matching title and/or description |
